@@ -12,6 +12,7 @@ import { invalidInputMessage } from './modules/invalidInputMessage.js';
 import { addFile } from './modules/addFile.js';
 import { renameFile } from './modules/renameFile.js';
 import { copyFile } from './modules/copyFile.js';
+import { deleteFile } from './modules/deleteFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -78,6 +79,11 @@ commandLine.on('line', async (input) => {
 
     case 'cp':
       await copyFile(args);
+      defineCurrentWorkingDir();
+      break;
+
+    case 'rm':
+      await deleteFile(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
 
