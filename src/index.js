@@ -44,6 +44,11 @@ commandLine.on('line', async (input) => {
       process.exit(0);
       break;
 
+    case '.exit':
+      console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
+      process.exit(0);
+      break;
+
     case 'up':
       changeDir('..');
       defineCurrentWorkingDir();
