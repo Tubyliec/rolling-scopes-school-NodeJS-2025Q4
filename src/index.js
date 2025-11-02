@@ -11,6 +11,7 @@ import { addDir } from './modules/addDir.js';
 import { invalidInputMessage } from './modules/invalidInputMessage.js';
 import { addFile } from './modules/addFile.js';
 import { renameFile } from './modules/renameFile.js';
+import { copyFile } from './modules/copyFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -72,6 +73,11 @@ commandLine.on('line', async (input) => {
 
     case 'rn':
       await renameFile(args);
+      defineCurrentWorkingDir();
+      break;
+
+    case 'cp':
+      await copyFile(args);
       defineCurrentWorkingDir();
       break;
 
