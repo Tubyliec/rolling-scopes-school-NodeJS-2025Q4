@@ -9,6 +9,7 @@ import { createListOfFiles } from './modules/createListOfFiles.js';
 import { readFile } from './modules/readFile.js';
 import { addDir } from './modules/addDir.js';
 import { invalidInputMessage } from './modules/invalidInputMessage.js';
+import { addFile } from './modules/addFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -60,6 +61,11 @@ commandLine.on('line', async (input) => {
 
     case 'mkdir':
       await addDir(parseInput(args.join(' ')));
+      defineCurrentWorkingDir();
+      break;
+
+    case 'add':
+      await addFile(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
 
