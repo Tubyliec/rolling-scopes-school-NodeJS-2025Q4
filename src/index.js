@@ -7,6 +7,7 @@ import { parseInput } from './modules/parseInput.js';
 import { changeDir } from './modules/changeDir.js';
 import { createListOfFiles } from './modules/createListOfFiles.js';
 import { readFile } from './modules/readFile.js';
+import { addDir } from './modules/addDir.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -42,7 +43,7 @@ commandLine.on('line', async (input) => {
         console.log('Invalid input');
         break;
       }
-      changeDir(parseInput(args.join(' ')));
+      await changeDir(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
 
@@ -53,6 +54,11 @@ commandLine.on('line', async (input) => {
 
     case 'cat':
       await readFile(parseInput(args.join(' ')));
+      defineCurrentWorkingDir();
+      break;
+
+    case 'mkdir':
+      await addDir(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
   }
