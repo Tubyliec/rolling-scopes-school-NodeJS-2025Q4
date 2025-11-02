@@ -10,6 +10,7 @@ import { readFile } from './modules/readFile.js';
 import { addDir } from './modules/addDir.js';
 import { invalidInputMessage } from './modules/invalidInputMessage.js';
 import { addFile } from './modules/addFile.js';
+import { renameFile } from './modules/renameFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -66,6 +67,11 @@ commandLine.on('line', async (input) => {
 
     case 'add':
       await addFile(parseInput(args.join(' ')));
+      defineCurrentWorkingDir();
+      break;
+
+    case 'rn':
+      await renameFile(args);
       defineCurrentWorkingDir();
       break;
 
