@@ -15,6 +15,7 @@ import { copyFile } from './modules/copyFile.js';
 import { deleteFile } from './modules/deleteFile.js';
 import { moveFile } from './modules/moveFile.js';
 import { calcHash } from './modules/calcHash.js';
+import { compressFile } from './modules/compressFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -96,6 +97,11 @@ commandLine.on('line', async (input) => {
 
     case 'hash':
       await calcHash(args.join(' '));
+      defineCurrentWorkingDir();
+      break;
+
+    case 'compress':
+      await compressFile(args);
       defineCurrentWorkingDir();
       break;
 
