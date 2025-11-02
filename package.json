@@ -1,0 +1,22 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Tubyliec/file-manager#readme",
+  "bugs": {
+    "url": "https://github.com/Tubyliec/file-manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tubyliec/file-manager.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "start:n": "node src/index.js --username=your_username"
+  }
+}
