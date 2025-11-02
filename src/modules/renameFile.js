@@ -4,7 +4,7 @@ import path from 'node:path';
 export const renameFile = async (input) => {
   try {
     if (!Array.isArray(input) || input.length !== 2) {
-      throw new Error('Input must be [oldPath, newName]');
+      throw new Error('Input must be [oldName, newName]');
     }
 
     const [oldName, newName] = input;
