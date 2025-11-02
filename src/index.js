@@ -6,6 +6,7 @@ import { defineCurrentWorkingDir } from './modules/defineCurrentDir.js';
 import { parseInput } from './modules/parseInput.js';
 import { changeDir } from './modules/changeDir.js';
 import { createListOfFiles } from './modules/createListOfFiles.js';
+import { readFile } from './modules/readFile.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -47,6 +48,11 @@ commandLine.on('line', async (input) => {
 
     case 'ls':
       const list = await createListOfFiles(defineCurrentWorkingDir());
+      defineCurrentWorkingDir();
+      break;
+
+    case 'cat':
+      await readFile(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
   }
