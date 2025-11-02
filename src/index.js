@@ -8,6 +8,7 @@ import { changeDir } from './modules/changeDir.js';
 import { createListOfFiles } from './modules/createListOfFiles.js';
 import { readFile } from './modules/readFile.js';
 import { addDir } from './modules/addDir.js';
+import { invalidInputMessage } from './modules/invalidInputMessage.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -48,7 +49,7 @@ commandLine.on('line', async (input) => {
       break;
 
     case 'ls':
-      const list = await createListOfFiles(defineCurrentWorkingDir());
+      await createListOfFiles(defineCurrentWorkingDir());
       defineCurrentWorkingDir();
       break;
 
@@ -61,6 +62,10 @@ commandLine.on('line', async (input) => {
       await addDir(parseInput(args.join(' ')));
       defineCurrentWorkingDir();
       break;
+
+    default:
+      invalidInputMessage();
+      defineCurrentWorkingDir();
   }
 });
 
