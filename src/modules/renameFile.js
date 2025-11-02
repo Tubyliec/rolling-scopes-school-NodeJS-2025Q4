@@ -5,7 +5,7 @@ import { errorMessage } from './errorMessage.js';
 export const renameFile = async (input) => {
   try {
     if (!Array.isArray(input) || input.length !== 2) {
-      throw new Error('Input must be [oldName, newName]');
+      console.error('Input must be [oldName, newName]');
     }
 
     const [oldName, newName] = input;
