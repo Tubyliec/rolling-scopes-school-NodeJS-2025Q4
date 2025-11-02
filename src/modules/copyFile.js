@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { errorMessage } from './errorMessage.js';
 
 export const copyFile = async (input) => {
   try {
@@ -21,6 +22,6 @@ export const copyFile = async (input) => {
     reader.pipe(writer);
     console.log(`File copied successfully`);
   } catch {
-    throw new Error(`Cannot copy file`);
+    errorMessage();
   }
 };

@@ -1,5 +1,6 @@
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
+import { errorMessage } from './errorMessage.js';
 
 export const renameFile = async (input) => {
   try {
@@ -18,7 +19,7 @@ export const renameFile = async (input) => {
     console.log(
       `File successfully renamed ${resolvedOldPath} → ${resolvedNewPath}`,
     );
-  } catch (err) {
-    throw new Error(`Cannot rename file: ${err.message}`);
+  } catch {
+    errorMessage();
   }
 };

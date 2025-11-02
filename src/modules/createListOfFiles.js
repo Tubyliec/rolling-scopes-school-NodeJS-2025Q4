@@ -1,4 +1,5 @@
 import fsPromises from 'node:fs/promises';
+import { errorMessage } from './errorMessage.js';
 
 export const createListOfFiles = async (path) => {
   try {
@@ -15,6 +16,6 @@ export const createListOfFiles = async (path) => {
 
     return listForPrint;
   } catch {
-    throw new Error();
+    errorMessage();
   }
 };

@@ -1,5 +1,6 @@
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
+import { errorMessage } from './errorMessage.js';
 
 export const addDir = async (input) => {
   try {
@@ -8,6 +9,6 @@ export const addDir = async (input) => {
     await fsPromises.mkdir(resolvedPath, { recursive: true });
     console.log(`Directory created: ${resolvedPath}`);
   } catch (err) {
-    throw new Error(`Cannot create directory: ${err.message}`);
+    errorMessage();
   }
 };
