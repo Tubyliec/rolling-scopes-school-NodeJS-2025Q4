@@ -17,6 +17,7 @@ import { moveFile } from './modules/moveFile.js';
 import { calcHash } from './modules/calcHash.js';
 import { compressFile } from './modules/compressFile.js';
 import { decompressFile } from './modules/decompressFile.js';
+import { osInfo } from './modules/osInfo.js';
 
 const args = process.argv.slice(2);
 const userName = parseUserName(args);
@@ -30,6 +31,7 @@ let currentDir = defineCurrentWorkingDir();
 const commandLine = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
+  prompt: `Enter command, ${userName} > `,
 });
 
 commandLine.on('line', async (input) => {
@@ -111,10 +113,16 @@ commandLine.on('line', async (input) => {
       defineCurrentWorkingDir();
       break;
 
+    case 'os':
+      osInfo(args);
+      break;
+
     default:
       invalidInputMessage();
       defineCurrentWorkingDir();
   }
+
+  commandLine.prompt();
 });
 
 commandLine.on('close', () => {
