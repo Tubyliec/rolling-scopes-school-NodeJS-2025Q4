@@ -23,3 +23,9 @@ To start work in multi mode:
 ```sh
 npm run start:multi
 ```
+
+To start test:
+
+```sh
+npm run test
+```
