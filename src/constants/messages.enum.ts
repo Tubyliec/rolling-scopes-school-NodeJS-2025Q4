@@ -6,4 +6,5 @@ export enum MESSAGES {
   USER_NOT_FOUND = 'User not found',
   INVALID_USER_DATA = 'Invalid user data',
   RESOURCE_NOT_FOUND = 'Resource not found',
+  INTERNAL_SERVER_ERROR = 'Internal Server Error',
 }
