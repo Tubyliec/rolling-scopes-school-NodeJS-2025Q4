@@ -1,6 +1,5 @@
 import { User } from '../models/types/user.type';
 
-
 class db {
   private userStore = new Map<string, User>();
 
@@ -26,7 +25,7 @@ class db {
 
   replaceAllUsers(users: User[]): void {
     this.userStore.clear();
-    users.forEach(u => this.userStore.set(u.id, u));
+    users.forEach((u) => this.userStore.set(u.id, u));
   }
 }
 

@@ -12,7 +12,7 @@ import { STATUS_CODES } from '../constants/status-codes.enum';
 export const updateUser = async (
   response: ServerResponse,
   id: string,
-  body: any,
+  body: unknown,
 ) => {
   if (!validate(id)) {
     sendBadRequest(response, MESSAGES.INVALID_USER_ID);

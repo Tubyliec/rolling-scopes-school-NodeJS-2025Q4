@@ -3,7 +3,7 @@ import { ServerResponse } from 'node:http';
 export const sendJson = (
   response: ServerResponse,
   status: number,
-  payload: any,
+  payload: unknown,
 ) => {
   const body = JSON.stringify(payload);
   response.writeHead(status, {

@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { VitePluginNode } from 'vite-plugin-node';
 
 export default defineConfig({
+  server: {
+    port: 4000,
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -17,9 +21,6 @@ export default defineConfig({
       },
     },
     outDir: 'dist',
-  },
-  server: {
-    port: 3000,
   },
   resolve: {
     extensions: ['.ts', '.js'],

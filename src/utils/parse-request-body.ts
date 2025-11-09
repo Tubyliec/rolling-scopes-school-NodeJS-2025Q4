@@ -3,7 +3,7 @@ import { MESSAGES } from '../constants/messages.enum';
 
 export const parseRequestBody = async (
   request: IncomingMessage,
-): Promise<any> => {
+): Promise<unknown> => {
   const chunks: Uint8Array[] = [];
   for await (const chunk of request) {
     chunks.push(chunk);

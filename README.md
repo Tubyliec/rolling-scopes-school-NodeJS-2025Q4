@@ -5,11 +5,21 @@
 ```sh
 npm install
 ```
+
 To start work in development mode:
- ```sh
-npm run dev
+
+```sh
+npm run start:dev
+```
+
+To start work in production mode:
+
+```sh
+npm run start:prod
 ```
 
 To run linter:
- ```sh
+
+```sh
 npm run lint
+```
