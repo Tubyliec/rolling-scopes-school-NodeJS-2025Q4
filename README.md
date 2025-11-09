@@ -18,8 +18,8 @@ To start work in production mode:
 npm run start:prod
 ```
 
-To run linter:
+To start work in multi mode:
 
 ```sh
-npm run lint
+npm run start:multi
 ```

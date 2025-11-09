@@ -1,28 +1,44 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import { VitePluginNode } from 'vite-plugin-node';
+import { builtinModules } from 'module';
 
 export default defineConfig({
   server: {
     port: 4000,
   },
   build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'node16',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      fileName: 'index',
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        cluster: resolve(__dirname, 'src/cluster.ts'),
+      },
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['node:http', 'node:path', 'node:url', 'dotenv'],
+      external: [
+        ...builtinModules,
+        ...builtinModules.map((m) => `node:${m}`),
+        'dotenv',
+      ],
       output: {
         entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name][extname]',
+        chunkFileNames: 'chunks/[name]-[hash].js',
+        assetFileNames: 'assets/[name][extname]',
+        format: 'es',
+        preserveModules: false,
+        inlineDynamicImports: false,
       },
     },
-    outDir: 'dist',
   },
   resolve: {
     extensions: ['.ts', '.js'],
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(
+      process.env.NODE_ENV || 'production',
+    ),
   },
 });
