@@ -5,14 +5,17 @@
     "main": "index.ts",
     "type": "module",
     "scripts": {
-        "start": "node index.ts",
-        "start:dev": "nodemon index.ts",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "tsx index.ts",
+        "start:dev": "nodemon --exec tsx index.ts",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint . --ext .ts",
+        "format": "prettier --write ."
     },
     "author": "Andrei Auchynnikau",
     "keywords": [],
     "license": "ISC",
     "devDependencies": {
+        "@types/ws": "^8.18.1",
         "@typescript-eslint/eslint-plugin": "^8.46.4",
         "@typescript-eslint/parser": "^8.46.4",
         "eslint": "^9.39.1",
@@ -21,6 +24,7 @@
         "nodemon": "^2.0.16",
         "prettier": "^3.6.2",
         "ts-node": "^10.9.2",
+        "tsx": "^4.20.6",
         "typescript": "^5.9.3"
     },
     "dependencies": {
