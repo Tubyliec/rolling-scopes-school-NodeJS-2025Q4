@@ -1,7 +1,7 @@
 import { PlayerService } from './player-service';
 
 import { WebSocketServer } from 'ws';
-import { send } from '../../../utils/send';
+import { sendMessage } from '../../../utils/send';
 import { sendToAll } from '../../../utils/send-to-all';
 
 export const PlayerController = {
@@ -13,7 +13,7 @@ export const PlayerController = {
       ws.playerIndex = name;
     }
 
-    send(ws, 'reg', {
+    sendMessage(ws, 'reg', {
       name,
       index: ws.playerIndex,
       error: !response.success,

@@ -1,5 +1,10 @@
+import { Ship } from './ship';
+
 export interface Game {
-  id: string;
-  players: { id: string; ws: any; ships: any[] }[];
-  turn: string;
+  idGame: string;
+  players: string[];
+  ships: Record<string, Ship[]>;
+  hits: Record<string, Array<{x: number, y: number}>>;
+  misses: Record<string, Array<{x: number, y: number}>>;
+  currentTurn: string;
 }

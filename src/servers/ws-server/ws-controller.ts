@@ -3,6 +3,8 @@ import { Server as WebSocketServer } from 'ws';
 import { PlayerController } from '../modules/players/player-controller';
 import { bufferParse } from '../../utils/bufer-parse';
 import { RoomController } from '../modules/room/room-controller';
+import { GameController } from '../modules/game/game-controller';
+import { sendToAll } from '../../utils/send-to-all';
 
 export const wsController = (
   ws: WebSocket,
@@ -17,8 +19,23 @@ export const wsController = (
       case 'reg':
         PlayerController.reg(ws, data, wss);
         break;
+      case 'create_room':
+        RoomController.createRoom(ws, wss);
+        break;
+      case 'add_user_to_room':
+        RoomController.addUserToRoom(ws, data, wss);
+        break;
+      case 'add_ships':
+        GameController.addShips(ws, data, wss);
+        break;
+      case 'attack':
+        GameController.attack(ws, data, wss);
+        break;
+      case 'randomAttack':
+        GameController.randomAttack(ws, data, wss);
+        break;
       default:
-        console.log('Unknown command', type);
+        console.warn('Unknown type', type);
     }
   } catch (error) {
     process.stderr.write(
@@ -26,3 +43,7 @@ export const wsController = (
     );
   }
 };
+
+export function updateRooms(wss: WebSocketServer, rooms?: any) {
+  sendToAll(wss, 'update_room', rooms);
+}

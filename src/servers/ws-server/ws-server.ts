@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { wsController } from './ws-controller';
+import { updateRooms, wsController } from './ws-controller';
 import { PlayerWebSocket } from '../models/interfaces/player-ws';
 
 export const wsServer = async (PORT: number) => {
@@ -10,5 +10,9 @@ export const wsServer = async (PORT: number) => {
     ws.playerIndex = null;
     process.stdout.write('New connection \n');
     ws.on('message', (msg) => wsController(ws, msg, wss));
+  });
+
+  wss.on('close', () => {
+    updateRooms(wss);
   });
 };
