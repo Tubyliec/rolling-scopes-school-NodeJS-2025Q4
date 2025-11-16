@@ -2,6 +2,7 @@ import { WebSocket, type RawData } from 'ws';
 import { Server as WebSocketServer } from 'ws';
 import { PlayerController } from '../modules/players/player-controller';
 import { bufferParse } from '../../utils/bufer-parse';
+import { RoomController } from '../modules/room/room-controller';
 
 export const wsController = (
   ws: WebSocket,
@@ -9,21 +10,15 @@ export const wsController = (
   wss: WebSocketServer,
 ) => {
   try {
-    console.log(msg);
-
     const message = bufferParse(msg);
-
     const { type, data } = message;
-    console.log(type);
-    console.log(data);
-    console.log(typeof data);
 
     switch (type) {
       case 'reg':
-        PlayerController.reg(ws, data);
+        PlayerController.reg(ws, data, wss);
         break;
       default:
-        process.stdout.write(`Unknown command: ${type}\n`);
+        console.log('Unknown command', type);
     }
   } catch (error) {
     process.stderr.write(

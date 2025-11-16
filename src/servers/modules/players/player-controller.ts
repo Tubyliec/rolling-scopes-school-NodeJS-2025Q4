@@ -1,18 +1,24 @@
 import { PlayerService } from './player-service';
 
-import { WebSocket } from 'ws';
+import { WebSocketServer } from 'ws';
+import { send } from '../../../utils/send';
+import { sendToAll } from '../../../utils/send-to-all';
 
 export const PlayerController = {
-  reg(ws: WebSocket, data: { name: string; password: string }) {
-    console.log(data);
+  reg(ws: any, data: any, wss: WebSocketServer) {
     const { name, password } = data;
-    const { player, error, errorText } = PlayerService.register(name, password);
-    const message = JSON.stringify({
-      type: 'reg',
-      data: { name, index: name, error, errorText },
-      id: 0,
+    const response = PlayerService.register(name, password);
+    if (response.success) {
+      ws.playerName = name;
+      ws.playerIndex = name;
+    }
+
+    send(ws, 'reg', {
+      name,
+      index: ws.playerIndex,
+      error: !response.success,
+      errorText: response.success ? '' : response.errorText,
     });
-    console.log(message);
-    ws.send(message);
+    sendToAll(wss, 'update_winners', PlayerService.getWinners());
   },
 };
