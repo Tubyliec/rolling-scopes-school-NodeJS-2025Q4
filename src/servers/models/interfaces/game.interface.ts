@@ -1,10 +1,7 @@
-import { Ship } from './ship';
+import { GamePlayer } from './game-player';
 
 export interface Game {
-  idGame: string;
-  players: string[];
-  ships: Record<string, Ship[]>;
-  hits: Record<string, Array<{x: number, y: number}>>;
-  misses: Record<string, Array<{x: number, y: number}>>;
-  currentTurn: string;
+  id: string;
+  players: GamePlayer[];
+  currentPlayer: string;
 }

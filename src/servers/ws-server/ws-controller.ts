@@ -44,6 +44,6 @@ export const wsController = (
   }
 };
 
-export function updateRooms(wss: WebSocketServer, rooms?: any) {
+export function updateRooms(wss: WebSocketServer, rooms?: unknown) {
   sendToAll(wss, 'update_room', rooms);
 }

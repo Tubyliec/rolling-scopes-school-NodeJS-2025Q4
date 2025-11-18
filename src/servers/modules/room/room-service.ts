@@ -1,13 +1,11 @@
-import { v4 as uuid } from 'uuid';
 import { Room } from '../../models/interfaces/room.interface';
 import { RoomUser } from '../../models/interfaces/room-user.interface';
 
 const rooms: Room[] = [];
-let gameIdCounter = 1;
 
 export const RoomService = {
   createRoom(user: RoomUser) {
-    const roomId = uuid();
+    const roomId = Date.now().toString();
     const room: Room = { roomId, roomUsers: [user] };
     rooms.push(room);
     return room;
@@ -18,34 +16,37 @@ export const RoomService = {
     if (!room) {
       return { ok: false, error: 'Room not found' };
     }
-    if (room.roomUsers.some((user) => user.index === user.index)) {
+
+    if (room.roomUsers.some((u) => u.index === user.index)) {
       return { ok: false, error: 'You already in this room' };
     }
+
     if (room.roomUsers.length >= 2) {
       return { ok: false, error: 'Room is full' };
     }
-    room.roomUsers.push(user);
-    if (room.roomUsers.length === 2) {
-      const gameId = gameIdCounter++;
-      return {
-        ok: true,
-        room,
-        shouldStartGame: true,
-        gameData: {
-          gameId,
-          players: room.roomUsers.map((player, index) => ({
-            ...player,
-            idPlayer: index + 1,
-            gameId,
-          })),
-        },
-      };
-    }
 
+    room.roomUsers.push(user);
     return { ok: true, room };
   },
 
-  getAvailableRooms() {
+  getRooms() {
     return rooms;
   },
+
+  removeRoom(roomId: string) {
+    const index = rooms.findIndex((room: Room) => room.roomId === roomId);
+    if (index >= 0) rooms.splice(index, 1);
+  },
 };
+
+export function getAvailableRooms() {
+  return rooms
+    .filter((room: Room) => room.roomUsers.length === 1)
+    .map((room: Room) => ({
+      roomId: room.roomId,
+      roomUsers: room.roomUsers.map((user: RoomUser) => ({
+        name: user.name,
+        index: user.index,
+      })),
+    }));
+}

@@ -14,9 +14,14 @@ export const PlayerService = {
     return { success: true, player: player };
   },
 
+  addWin(name: string) {
+    const player = players.find((x) => x.name === name);
+    if (player) player.wins = (player.wins || 0) + 1;
+  },
+
   getWinners() {
     return players
-      .map((player) => ({ name: player.name, wins: player.wins }))
+      .map((player: Player) => ({ name: player.name, wins: player.wins }))
       .sort((a, b) => b.wins - a.wins);
   },
 };

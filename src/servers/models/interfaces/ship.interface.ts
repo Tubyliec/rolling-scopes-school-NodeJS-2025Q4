@@ -3,4 +3,5 @@ export interface Ship {
   direction: boolean;
   length: number;
   type: 'small' | 'medium' | 'large' | 'huge';
+  hits?: { x: number; y: number }[];
 }

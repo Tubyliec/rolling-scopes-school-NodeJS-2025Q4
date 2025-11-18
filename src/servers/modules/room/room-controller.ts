@@ -1,41 +1,74 @@
-import { RoomService } from './room-service';
-import { sendMessage } from '../../../utils/send';
+import { getAvailableRooms, RoomService } from './room-service';
+import { sendMessage } from '../../../utils/send-message';
 import { sendToAll } from '../../../utils/send-to-all';
 import { WebSocketServer } from 'ws';
+import { PlayerWebSocket } from '../../models/interfaces/player-ws';
+import { GameService } from '../game/game-service';
+import { PlayerService } from '../players/player-service';
+import { RoomData } from '../../models/interfaces/room-data.interface';
 
 export const RoomController = {
-  createRoom(ws: any, wss: WebSocketServer) {
-    const room = RoomService.createRoom({
+  createRoom(ws: PlayerWebSocket, wss: WebSocketServer) {
+    if (!ws.playerName || !ws.playerIndex) {
+      sendMessage(ws, 'create_room', {
+        error: true,
+        errorText: 'Not registered',
+      });
+      return;
+    }
+    const user = {
       name: ws.playerName,
       index: ws.playerIndex,
-    });
-    sendToAll(wss, 'update_room', RoomService.getAvailableRooms());
+      ws,
+    };
+    RoomService.createRoom(user);
+    sendToAll(wss, 'update_room', getAvailableRooms());
   },
 
-  addUserToRoom(ws: any, data: any, wss: WebSocketServer) {
-    const result = RoomService.addUserToRoom(
-      { name: ws.playerName, index: ws.playerIndex },
-      data.indexRoom,
-    );
+  addUserToRoom(ws: PlayerWebSocket, data: RoomData, wss: WebSocketServer) {
+    if (!ws.playerName || !ws.playerIndex) {
+      sendMessage(ws, 'add_user_to_room', {
+        error: true,
+        errorText: 'Not registered',
+      });
+      return;
+    }
+    const player = { name: ws.playerName, index: ws.playerIndex, ws };
+    const result = RoomService.addUserToRoom(player, data.indexRoom);
+    if (!result.ok) {
+      sendMessage(ws, 'add_user_to_room', {
+        error: true,
+        errorText: result.error,
+      });
+      return;
+    }
 
-    if (result && result.ok) {
-      sendToAll(wss, 'update_room', RoomService.getAvailableRooms());
-      if (result.shouldStartGame && result.gameData) {
-        const { gameId, players } = result.gameData;
+    const room = result.room;
+    if (!room) {
+      sendMessage(ws, 'add_user_to_room', {
+        error: true,
+        errorText: 'Room not found',
+      });
+      return;
+    }
 
-        players.forEach((player: any) => {
-          wss.clients.forEach((client: any) => {
-            if (client.playerIndex === player.index) {
-              sendMessage(client, 'create_game', {
-                data: {
-                  idGame: gameId,
-                  idPlayer: player.idPlayer,
-                },
-              });
-            }
+    if (room.roomUsers.length === 2) {
+      const game = GameService.createGame(room);
+      room.roomUsers.forEach((user) => {
+        const gamePlayer = game.players.find(
+          (player) => player.playerIndex === user.index,
+        );
+        if (user.ws)
+          sendMessage(user.ws, 'create_game', {
+            idGame: game.id,
+            idPlayer: gamePlayer?.idInGame ?? user.index,
           });
-        });
-      }
+      });
+
+      sendToAll(wss, 'update_room', getAvailableRooms());
+      sendToAll(wss, 'update_winners', PlayerService.getWinners());
+    } else {
+      sendToAll(wss, 'update_room', getAvailableRooms());
     }
   },
 };
