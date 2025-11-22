@@ -6,6 +6,10 @@ export function sendToAll(wss: WebSocketServer, type: string, data: unknown) {
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
+      process.stdout.write(
+        `Sent message to all clients:
+         Type: ${type}\nData: ${JSON.stringify(data, null, 2)}\n`,
+      );
     }
   });
 }

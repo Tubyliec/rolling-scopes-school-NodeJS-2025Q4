@@ -14,6 +14,10 @@ export const wsController = (
   try {
     const message = bufferParse(msg);
     const { type, data } = message;
+    process.stdout.write(
+      `Received message:
+       Type: ${type}\nData: ${JSON.stringify(data, null, 2)}\n`,
+    );
 
     switch (type) {
       case 'reg':
@@ -26,7 +30,7 @@ export const wsController = (
         RoomController.addUserToRoom(ws, data, wss);
         break;
       case 'add_ships':
-        GameController.addShips(ws, data, wss);
+        GameController.addShips(ws, data);
         break;
       case 'attack':
         GameController.attack(ws, data, wss);

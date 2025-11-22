@@ -6,8 +6,8 @@ export const wsServer = async (PORT: number) => {
   const wss = new WebSocketServer({ port: PORT });
 
   wss.on('connection', (ws: PlayerWebSocket) => {
-    ws.playerName = null;
-    ws.playerIndex = null;
+    ws.playerName = undefined;
+    ws.playerIndex = undefined;
     process.stdout.write('New connection \n');
     ws.on('message', (msg) => wsController(ws, msg, wss));
   });

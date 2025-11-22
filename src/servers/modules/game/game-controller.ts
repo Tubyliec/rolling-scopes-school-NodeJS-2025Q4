@@ -1,12 +1,13 @@
 import { WebSocketServer } from 'ws';
 import { GameService } from './game-service';
 import { sendMessage } from '../../../utils/send-message';
-import { sendToAll } from '../../../utils/send-to-all';
 import { PlayerWebSocket } from '../../models/interfaces/player-ws';
 import { GamePlayer } from '../../models/interfaces/game-player';
 import { AddShipsData } from '../../models/interfaces/add-ships-data.interface';
 import { RandomAttackData } from '../../models/interfaces/random-attack-data.interface';
 import { AttackData } from '../../models/interfaces/attack-data.interface';
+import { sendToAll } from '../../../utils/send-to-all';
+import { PlayerService } from '../players/player-service';
 
 export const GameController = {
   addShips(ws: PlayerWebSocket, data: AddShipsData) {
@@ -67,15 +68,21 @@ export const GameController = {
           sendMessage(player.ws, 'turn', { currentPlayer: game.currentPlayer }),
         );
       }
-    } else if (response.status === 'killed') {
+    } else if (
+      response.status === 'killed' ||
+      response.status === 'game_over'
+    ) {
+      const attackMessage = {
+        position: { x, y },
+        currentPlayer: indexPlayer,
+        status: 'killed',
+      };
+
       if (game) {
-        game.players.forEach((player: GamePlayer) =>
-          sendMessage(player.ws, 'attack', {
-            position: { x, y },
-            currentPlayer: indexPlayer,
-            status: 'killed',
-          }),
-        );
+        game.players.forEach((player: GamePlayer) => {
+          sendMessage(player.ws, 'attack', attackMessage);
+        });
+
         if (response.around && Array.isArray(response.around)) {
           response.around.forEach((cell) => {
             game.players.forEach((player) => {
@@ -87,24 +94,14 @@ export const GameController = {
             });
           });
         }
-        if (response.win) {
-          game.players.forEach((player) =>
-            sendMessage(player.ws, 'finish', { winPlayer: response.winnerId }),
-          );
-          sendToAll(wss, 'update_winners', undefined);
-        } else {
-          game.players.forEach((player: GamePlayer) =>
-            sendMessage(player.ws, 'turn', {
-              currentPlayer: game.currentPlayer,
-            }),
-          );
-        }
       } else {
-        sendMessage(ws, 'attack', {
-          position: { x, y },
-          currentPlayer: indexPlayer,
-          status: 'killed',
-        });
+        sendMessage(ws, 'attack', attackMessage);
+      }
+
+      if (response.status === 'game_over') {
+        const winnerId = response.winnerId;
+        sendMessage(ws, 'finish', { winPlayer: winnerId });
+        sendToAll(wss, 'update_winners', PlayerService.getWinners());
       }
     }
   },

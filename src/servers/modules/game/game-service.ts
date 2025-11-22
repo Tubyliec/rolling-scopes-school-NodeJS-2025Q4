@@ -26,6 +26,13 @@ export const GameService = {
     return game;
   },
 
+  deleteGame(gameId: string) {
+    const gameIndex = games.findIndex((game) => game.id === gameId);
+    if (gameIndex >= 0) {
+      games.splice(gameIndex, 1);
+    }
+  },
+
   findGameById(gameId: string): Game | undefined {
     return games.find((game) => game.id === gameId);
   },
@@ -85,10 +92,12 @@ export const GameService = {
 
     const attacker = game.players.find(
       (player) => player.idInGame === attackerId,
-    )!;
+    );
     const defender = game.players.find(
       (player) => player.idInGame !== attackerId,
-    )!;
+    );
+    if (!attacker || !defender) return null;
+
     if (
       defender.hits.some((hit) => hit.x === x && hit.y === y) ||
       defender.misses.some((miss) => miss.x === x && miss.y === y)
@@ -120,14 +129,14 @@ export const GameService = {
             const index = games.findIndex((game) => game.id === gameId);
             if (index >= 0) games.splice(index, 1);
             return {
-              status: 'killed',
+              status: 'game_over',
               killedShip: {
                 ...ship,
                 direction: ship.direction,
               },
-              win: true,
               winnerId: attackerId,
               around,
+              gameId: game.id,
             };
           }
           return {
@@ -152,7 +161,6 @@ export const GameService = {
         };
       }
     }
-
     defender.misses.push({ x, y });
     game.currentPlayer = defender.idInGame;
     return { status: 'miss', nextPlayer: game.currentPlayer };

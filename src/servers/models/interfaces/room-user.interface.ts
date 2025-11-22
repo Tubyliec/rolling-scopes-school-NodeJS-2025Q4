@@ -3,6 +3,6 @@ import { WebSocket } from 'ws';
 export interface RoomUser {
   name: string;
   index: string;
-  ws?: WebSocket;
+  ws: WebSocket;
   gameIndex?: string;
 }
