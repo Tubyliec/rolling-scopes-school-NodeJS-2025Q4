@@ -30,7 +30,7 @@ export const postMutationType = {
       id: { type: new GraphQLNonNull(UUIDType) },
       dto: { type: new GraphQLNonNull(ChangePostInputType)}
     },
-    resolve: async (parent: unknown, args: ChangePostType, context: Context)=> {
+    resolve: async (args: ChangePostType, context: Context)=> {
       try {
         return await context.prisma.post.update({ where: { id: args.id }, data: args.dto });
       } catch (err) {
@@ -44,7 +44,7 @@ export const postMutationType = {
     args: {
       id: { type: new GraphQLNonNull(UUIDType) },
     },
-    resolve: async (parent: unknown, args: DeletePostType, context: Context) => {
+    resolve: async (args: DeletePostType, context: Context) => {
       try {
         await context.prisma.post.delete({ where: { id: args.id } })
       } catch (err) {

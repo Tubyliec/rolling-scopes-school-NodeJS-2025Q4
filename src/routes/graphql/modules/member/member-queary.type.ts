@@ -21,7 +21,7 @@ export const memberQueryType = {
     args: {
       id: { type: new GraphQLNonNull(MemberTypeIdEnum) },
     },
-    resolve: async (args: { id: string }, context: Context) => {
+    resolve: async (parent: unknown, args: { id: string }, context: Context) => {
       return context.memberTypeLoader.load(args.id);
     }
   }
