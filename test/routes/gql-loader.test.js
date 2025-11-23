@@ -14,7 +14,7 @@ import { MemberTypeId } from '../../src/routes/member-types/schemas.js';
 await test('gql-loader', async (t) => {
   const app = await build(t);
 
-  await t.test('Get users with their post, memberTypes.', async (t) => {
+  await t.test('Get users with their posts, memberTypes.', async (t) => {
     const { body: user1 } = await createUser(app);
     await createPost(app, user1.id);
     await createProfile(app, user1.id, MemberTypeId.BASIC);
