@@ -3,7 +3,6 @@ import { Subscription } from './types/subcription.type.js';
 import { GraphQLNonNull } from 'graphql';
 import { UUIDType } from '../../types/uuid.js';
 import { GraphQLString } from 'graphql';
-import { GraphQLObjectType } from 'graphql';
 
 export const subscribeMutationType = {
   subscribeTo: {
