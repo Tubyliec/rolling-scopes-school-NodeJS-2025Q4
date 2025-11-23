@@ -7,11 +7,11 @@ import { profileLoader } from './modules/profiles/profile-loader.js';
 export const loaders = (prisma: PrismaClient) => {
   return {
     prisma,
-    postLoader: postLoader(prisma),
-    postsByAuthorLoader: postsByAuthorLoader(prisma),
     memberTypeLoader: memberTypeLoader(prisma),
     userLoader: userLoader(prisma),
     profileByIdLoader: profileLoader(prisma, 'id'),
     profileByUserIdLoader: profileLoader(prisma, 'userId'),
+    postLoader: postLoader(prisma),
+    postsByAuthorLoader: postsByAuthorLoader(prisma),
   };
 };

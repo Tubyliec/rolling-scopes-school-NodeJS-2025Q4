@@ -19,6 +19,7 @@ export const subscribeMutationType = {
             authorId: args.authorId,
           },
         });
+        return 'Subscribed successfully';
       } catch (error) {
         throw new Error('User could not subscribe');
       }
@@ -40,8 +41,7 @@ export const subscribeMutationType = {
             },
           },
         });
-
-        return 'Successfully unsubscribed';
+        return 'Unsubscribed successfully';
       } catch (error) {
         throw new Error('User could not unsubscribe');
       }

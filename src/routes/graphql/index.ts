@@ -6,6 +6,8 @@ import { rootMutationType } from './modules/root/root-mutation.js';
 import { loaders } from './loaders.js';
 import depthLimit from 'graphql-depth-limit';
 
+const MAX_DEPTH = 5;
+
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   const { prisma } = fastify;
 
@@ -21,18 +23,18 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     async handler(req) {
       const schema = new GraphQLSchema({
         query: rootQueryType,
-        mutation: rootMutationType
+        mutation: rootMutationType,
       });
 
-      const source = req.body.query
+      const source = req.body.query;
       const variableValues = req.body.variables;
       const contextValue = loaders(prisma);
 
-      const validation = validate(schema, parse(source), [depthLimit(5)]);
+      const validation = validate(schema, parse(source), [depthLimit(MAX_DEPTH)]);
 
-      if (validation.length) {
+      if (validation.length > 0) {
         return {
-          errors: validation
+          errors: validation,
         };
       }
 
