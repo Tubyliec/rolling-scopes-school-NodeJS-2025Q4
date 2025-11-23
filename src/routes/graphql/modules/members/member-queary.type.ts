@@ -7,22 +7,21 @@ import { MemberTypeIdEnum } from './types/member-type-id-enum.type.js';
 export const memberQueryType = {
   memberTypes: {
     type: new GraphQLList(MemberType),
-    resolve: async (context: Context) => {
+    resolve: async (_parent: unknown, _args: unknown, context: Context) => {
       const memberTypes = await context.prisma.memberType.findMany();
-      memberTypes.forEach((memberType) =>
-        context.memberTypeLoader.prime(memberType.id, memberType),
-      );
-
+      memberTypes.forEach((memberType) => {
+        context.memberTypeLoader.prime(memberType.id, memberType);
+      });
       return memberTypes;
-    }
+    },
   },
   memberType: {
     type: MemberType,
     args: {
       id: { type: new GraphQLNonNull(MemberTypeIdEnum) },
     },
-    resolve: async (parent: unknown, args: { id: string }, context: Context) => {
+    resolve: async (_parent: unknown, args: { id: string }, context: Context) => {
       return context.memberTypeLoader.load(args.id);
-    }
-  }
-}
+    },
+  },
+};
