@@ -142,7 +142,7 @@ await test('gql-queries', async (t) => {
     t.ok(data.userWithNullProfile.profile === null);
   });
 
-  await t.test('Get user/users with his/their posts, profile, memberType.', async (t) => {
+  await t.test('Get user/users with his/their post, profile, memberType.', async (t) => {
     const { body: user1 } = await createUser(app);
     const { body: post1 } = await createPost(app, user1.id);
     const { body: profile1 } = await createProfile(app, user1.id, MemberTypeId.BASIC);
