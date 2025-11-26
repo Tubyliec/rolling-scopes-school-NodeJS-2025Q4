@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user/models/interfaces/user.interface';
 
 @Injectable()
 export class DatabaseService<T> {

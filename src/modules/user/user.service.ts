@@ -9,7 +9,6 @@ import { v4 } from 'uuid';
 import { DatabaseService } from '../database/database.service';
 import { User } from './models/interfaces/user.interface';
 import { UpdatePasswordDto } from './models/dto/update-password.dto';
-import { ResponseUserDto } from './models/dto/response-user.dto';
 
 @Injectable()
 export class UserService {

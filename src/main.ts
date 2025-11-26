@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as process from 'node:process';
-import { validate } from 'uuid';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
