@@ -20,7 +20,6 @@ export class UserService {
 
   public async getUser(id: string): Promise<User> {
     const user: User = this.databaseService.getItem(id);
-    console.log(user);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
