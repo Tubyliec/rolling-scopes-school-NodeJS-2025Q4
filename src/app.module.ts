@@ -1,12 +1,22 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './modules/database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { TrackModule } from './modules/track/track.module';
+import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
 
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath: ['config/.env'] }), DatabaseModule, UserModule, TrackModule],
+  imports: [
+    ConfigModule.forRoot({ envFilePath: ['config/.env'] }),
+    DatabaseModule,
+    UserModule,
+    TrackModule,
+  ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

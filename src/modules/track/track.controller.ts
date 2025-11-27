@@ -25,7 +25,7 @@ export class TrackController {
   }
 
   @Get(':id')
-  async getUser(
+  async getTrack(
     @Param('id', UUIDValidationPipe)
     id: string,
   ): Promise<ResponseTrackDto> | undefined {
