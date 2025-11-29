@@ -9,7 +9,6 @@ import { ArtistService } from '../artist/artist.service';
 import { AlbumService } from '../album/album.service';
 import { TrackService } from '../track/track.service';
 import { FavoriteType } from './models/types/favorite-type';
-import { ItemType } from './models/types/item-type.type';
 import { ResponseFavoriteDto } from './models/dto/response-favorite.dto';
 
 @Injectable()
