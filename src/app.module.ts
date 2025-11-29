@@ -4,6 +4,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { TrackModule } from './modules/track/track.module';
 import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
+import { ArtistModule } from './modules/artist/artist.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
     DatabaseModule,
     UserModule,
     TrackModule,
+    ArtistModule,
   ],
   controllers: [],
   providers: [],
