@@ -10,10 +10,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
-import { ResponseTrackDto } from '../track/models/dto/response-track.dto';
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
-import { CreateTrackDto } from '../track/models/dto/create-track.dto';
-import { UpdateTrackDto } from '../track/models/dto/update-track.dto';
 import { ResponseArtistDto } from './models/dto/response-artist.dto';
 import { CreateArtistDto } from './models/dto/create-artist.dto';
 import { UpdateArtistDto } from './models/dto/update-artist.dto';
