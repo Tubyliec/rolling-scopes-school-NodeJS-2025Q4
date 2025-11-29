@@ -6,6 +6,7 @@ import { TrackModule } from './modules/track/track.module';
 import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
 import { ArtistModule } from './modules/artist/artist.module';
 import { AlbumModule } from './modules/album/album.module';
+import { FavoriteModule } from './modules/favorite/favorite.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AlbumModule } from './modules/album/album.module';
     TrackModule,
     ArtistModule,
     AlbumModule,
+    FavoriteModule,
   ],
   controllers: [],
   providers: [],

@@ -1,8 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Artist } from '../artist/models/interfaces/artist.interface';
-import { CreateArtistDto } from '../artist/models/dto/create-artist.dto';
 import { v4 } from 'uuid';
-import { UpdateArtistDto } from '../artist/models/dto/update-artist.dto';
 import { DatabaseService } from '../database/database.service';
 import { Album } from './models/interfaces/album.interface.dto';
 import { CreateAlbumDto } from './models/dto/create-album.dto';
