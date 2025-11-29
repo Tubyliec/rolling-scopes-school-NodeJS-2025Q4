@@ -4,17 +4,23 @@ import { v4 } from 'uuid';
 import { Artist } from './models/interfaces/artist.interface';
 import { CreateArtistDto } from './models/dto/create-artist.dto';
 import { UpdateArtistDto } from './models/dto/update-artist.dto';
+import { TrackService } from '../track/track.service';
+import { AlbumService } from '../album/album.service';
 
 @Injectable()
 export class ArtistService {
-  constructor(private databaseService: DatabaseService<Artist>) {}
+  constructor(
+    private databaseService: DatabaseService<Artist>,
+    private trackService: TrackService,
+    private albumService: AlbumService,
+  ) {}
 
   public async getAllArtists(): Promise<Artist[]> {
     return this.databaseService.getAllItems();
   }
 
   public async getArtist(id: string): Promise<Artist> {
-    const artist: Artist = this.databaseService.getItem(id);
+    const artist = this.databaseService.getItem(id);
     if (!artist) {
       throw new NotFoundException(`Artist with ID ${id} not found`);
     }
@@ -48,9 +54,27 @@ export class ArtistService {
 
   public async deleteArtist(id: string): Promise<boolean> {
     const isArtistDeleted = this.databaseService.deleteItem(id);
+
     if (!isArtistDeleted) {
       throw new NotFoundException(`Artist with ID ${id} not found`);
     }
+
+    const tracks = (await this.trackService.getAllTracks()).filter(
+      (track) => track.artistId === id,
+    );
+
+    const albums = (await this.albumService.getAllAlbums()).filter(
+      (album) => album.artistId === id,
+    );
+
+    await Promise.all([
+      ...tracks.map((track) =>
+        this.trackService.updateTrack(track.id, { ...track, artistId: null }),
+      ),
+      ...albums.map((album) =>
+        this.albumService.updateAlbum(album.id, { ...album, artistId: null }),
+      ),
+    ]);
     return isArtistDeleted;
   }
 }

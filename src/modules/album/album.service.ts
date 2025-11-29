@@ -4,10 +4,14 @@ import { DatabaseService } from '../database/database.service';
 import { Album } from './models/interfaces/album.interface.dto';
 import { CreateAlbumDto } from './models/dto/create-album.dto';
 import { UpdateAlbumDto } from './models/dto/update-album.dto';
+import { TrackService } from '../track/track.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private databaseService: DatabaseService<Album>) {}
+  constructor(
+    private databaseService: DatabaseService<Album>,
+    private trackService: TrackService,
+  ) {}
 
   public async getAllAlbums(): Promise<Album[]> {
     return this.databaseService.getAllItems();
@@ -52,6 +56,12 @@ export class AlbumService {
     if (!isAlbumDeleted) {
       throw new NotFoundException(`Album with ID ${id} not found`);
     }
+    const allTracks = await this.trackService.getAllTracks();
+    const tracks = allTracks.filter((track) => track.albumId === id);
+
+    tracks.forEach((track) => {
+      this.trackService.updateTrack(track.id, { ...track, albumId: null });
+    });
     return isAlbumDeleted;
   }
 }

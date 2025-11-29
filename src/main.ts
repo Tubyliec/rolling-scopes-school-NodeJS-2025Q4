@@ -1,8 +1,8 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as process from 'node:process';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +15,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   await app.listen(port, () => {
     process.stdout.write(`Server started on port ${port}\n`);
   });

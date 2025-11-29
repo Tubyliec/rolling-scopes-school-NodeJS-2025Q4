@@ -22,25 +22,27 @@ export class FavoriteService {
   ) {}
 
   public async createFavoriteItem(id: string, type: FavoriteType) {
-    let item: ItemType;
-    switch (type) {
-      case 'artists':
-        item = await this.artistService.getArtist(id);
-        break;
-      case 'albums':
-        item = await this.albumService.getAlbum(id);
-        break;
-      case 'tracks':
-        item = await this.trackService.getTrack(id);
-        break;
+    try {
+      switch (type) {
+        case 'artists':
+          await this.artistService.getArtist(id);
+          break;
+        case 'albums':
+          await this.albumService.getAlbum(id);
+          break;
+        case 'tracks':
+          await this.trackService.getTrack(id);
+          break;
+      }
+      this.databaseService.createFavoriteItem(id, type);
+    } catch (error) {
+      if (error.status === 404) {
+        throw new UnprocessableEntityException(
+          `${type.toUpperCase()} with ID ${id} not found`,
+        );
+      }
+      throw error;
     }
-    if (!item) {
-      throw new UnprocessableEntityException(
-        `${type.toUpperCase()} with ID ${id} not found`,
-      );
-    }
-
-    this.databaseService.createFavoriteItem(id, type);
   }
 
   public async findAllFavoriteItems(): Promise<ResponseFavoriteDto> {
