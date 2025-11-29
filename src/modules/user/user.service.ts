@@ -18,7 +18,7 @@ export class UserService {
 
   public async getAllUsers(): Promise<ResponseUserDto[]> {
     const users = this.databaseService.getAllItems();
-    return users.map(user => plainToInstance(ResponseUserDto, user));
+    return users.map((user) => plainToInstance(ResponseUserDto, user));
   }
 
   public async getUser(id: string): Promise<ResponseUserDto> {
