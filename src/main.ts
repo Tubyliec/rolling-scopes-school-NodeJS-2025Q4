@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as process from 'node:process';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { generateSwaggerYaml } from '../config/generate-swagger-yaml';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +20,17 @@ async function bootstrap() {
 
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+
+  const docConfig = new DocumentBuilder()
+    .setTitle('Home Library Service')
+    .setDescription('The Home Library Service API description')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, docConfig);
+  SwaggerModule.setup('api', app, documentFactory);
+
+  await generateSwaggerYaml(app);
+
   await app.listen(port, () => {
     process.stdout.write(`Server started on port ${port}\n`);
   });
