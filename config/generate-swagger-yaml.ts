@@ -11,6 +11,7 @@ export async function generateSwaggerYaml(app: any): Promise<void> {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   const docsDir = join(process.cwd(), 'doc');
   if (!docsDir) {

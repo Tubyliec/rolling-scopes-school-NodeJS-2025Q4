@@ -21,14 +21,6 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
-  const docConfig = new DocumentBuilder()
-    .setTitle('Home Library Service')
-    .setDescription('The Home Library Service API description')
-    .setVersion('1.0')
-    .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, docConfig);
-  SwaggerModule.setup('api', app, documentFactory);
-
   await generateSwaggerYaml(app);
 
   await app.listen(port, () => {
