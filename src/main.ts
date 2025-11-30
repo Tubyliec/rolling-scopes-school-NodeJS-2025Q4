@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as process from 'node:process';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { generateSwaggerYaml } from '../config/generate-swagger-yaml';
 
 async function bootstrap() {
