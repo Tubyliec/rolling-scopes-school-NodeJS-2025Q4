@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as process from 'node:process';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { generateSwaggerYaml } from '../config/generate-swagger-yaml';
+import { generateSwaggerYaml } from '../tools/generate-swagger-yaml';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,7 +22,7 @@ async function bootstrap() {
 
   await generateSwaggerYaml(app);
 
-  await app.listen(port, () => {
+  await app.listen(port, '0.0.0.0', () => {
     process.stdout.write(`Server started on port ${port}\n`);
   });
 }

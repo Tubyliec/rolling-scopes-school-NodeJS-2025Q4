@@ -10,7 +10,7 @@ import { FavoriteModule } from './modules/favorite/favorite.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ['config/.env'] }),
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     DatabaseModule,
     UserModule,
     TrackModule,

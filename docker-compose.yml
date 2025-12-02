@@ -1,0 +1,46 @@
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      - PORT=${PORT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - postgres
+    networks:
+      - my-bridge-network
+
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+
+    restart: always
+
+    networks:
+      - my-bridge-network
+
+volumes:
+  postgres-volume:
+    name: postgres-volume
+
+networks:
+  my-bridge-network:
+    driver: bridge
