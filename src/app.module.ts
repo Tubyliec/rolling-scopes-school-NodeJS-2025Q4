@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './shared/middlewares/logger.middleware';
 import { ArtistModule } from './modules/artist/artist.module';
 import { AlbumModule } from './modules/album/album.module';
 import { FavoriteModule } from './modules/favorite/favorite.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { FavoriteModule } from './modules/favorite/favorite.module';
     ArtistModule,
     AlbumModule,
     FavoriteModule,
+    PrismaModule,
   ],
   controllers: [],
   providers: [],

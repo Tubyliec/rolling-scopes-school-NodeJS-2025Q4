@@ -54,7 +54,7 @@ export class UserController {
   async deleteUser(
     @Param('id', UUIDValidationPipe)
     id: string,
-  ): Promise<boolean> {
+  ) {
     return this.userService.deleteUser(id);
   }
 }

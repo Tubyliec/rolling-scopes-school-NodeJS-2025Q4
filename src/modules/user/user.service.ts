@@ -1,53 +1,95 @@
 import {
   HttpException,
   HttpStatus,
-  Injectable,
+  Injectable, InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './models/dto/create-user.dto';
 import { v4 } from 'uuid';
-import { DatabaseService } from '../database/database.service';
-import { User } from './models/interfaces/user.interface';
 import { UpdatePasswordDto } from './models/dto/update-password.dto';
 import { ResponseUserDto } from './models/dto/response-user.dto';
 import { plainToInstance } from 'class-transformer';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private databaseService: DatabaseService<User>) {}
+  constructor(
+    private prismaService: PrismaService,
+  ) {
+  }
 
   public async getAllUsers(): Promise<ResponseUserDto[]> {
-    const users = this.databaseService.getAllItems();
-    return users.map((user) => plainToInstance(ResponseUserDto, user));
+    const users = await this.prismaService.user.findMany();
+    return users.map((user) => {
+      const userWithTimestamps = {
+        ...user,
+        createdAt: user.createdAt.getTime(),
+        updatedAt: user.updatedAt.getTime()
+      };
+      return plainToInstance(ResponseUserDto, userWithTimestamps);
+    });
   }
 
   public async getUser(id: string): Promise<ResponseUserDto> {
-    const user: User = this.databaseService.getItem(id);
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return plainToInstance(ResponseUserDto, user);
+    const userWithTimestamps = {
+      ...user,
+      createdAt: user.createdAt.getTime(),
+      updatedAt: user.updatedAt.getTime()
+    };
+    return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
 
   public async createUser(
     userRequest: CreateUserDto,
   ): Promise<ResponseUserDto> {
-    const user = {
-      ...userRequest,
-      id: v4(),
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+    const existingUser = await this.prismaService.user.findUnique({
+      where: {
+        login: userRequest.login,
+      },
+    });
+
+    if (existingUser) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'User with this login already exists',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const createdUser = await this.prismaService.user.create({
+      data: {
+        ...userRequest,
+        id: v4(),
+        version: 1,
+      },
+    });
+    const userWithTimestamps = {
+      ...createdUser,
+      createdAt: createdUser.createdAt.getTime(),
+      updatedAt: createdUser.updatedAt.getTime()
     };
-    const createdUser = this.databaseService.createItem(user);
-    return plainToInstance(ResponseUserDto, createdUser);
+    return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
 
   public async updateUser(
     id: string,
     updateRequest: UpdatePasswordDto,
   ): Promise<ResponseUserDto> {
-    const user = this.databaseService.getItem(id);
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -61,21 +103,24 @@ export class UserService {
       );
     }
 
-    const updatedUser = {
-      ...user,
-      password: updateRequest.newPassword,
-      version: user.version + 1,
-      updatedAt: Date.now(),
+    const updatedUserResult = await this.prismaService.user.update({
+      where: { id },
+      data: {
+        password: updateRequest.newPassword,
+        version: user.version + 1,
+      },
+    });
+    const userWithTimestamps = {
+      ...updatedUserResult,
+      createdAt: updatedUserResult.createdAt.getTime(),
+      updatedAt: updatedUserResult.updatedAt.getTime()
     };
-    const updatedUserResult = this.databaseService.updateItem(id, updatedUser);
-    return plainToInstance(ResponseUserDto, updatedUserResult);
+    return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
 
-  public async deleteUser(id: string): Promise<boolean> {
-    const isUserDeleted = this.databaseService.deleteItem(id);
-    if (!isUserDeleted) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return isUserDeleted;
+  public async deleteUser(id: string) {
+    const user = await this.getUser(id);
+    if (!user) throw new HttpException('User is not found', HttpStatus.NOT_FOUND);
+    return this.prismaService.user.delete({ where: { id } });
   }
 }
