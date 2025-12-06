@@ -1,0 +1,12 @@
+model Album {
+  id       String   @id @default(uuid())
+  name     String
+  year     Int
+  artistId String?
+
+  artist   Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  tracks   Track[]
+  favorites FavoriteAlbum[]
+
+  @@map("albums")
+}

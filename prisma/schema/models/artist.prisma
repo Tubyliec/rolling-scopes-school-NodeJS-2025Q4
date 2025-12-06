@@ -1,0 +1,11 @@
+model Artist {
+  id      String  @id @default(uuid())
+  name    String
+  grammy  Boolean @default(false)
+
+  albums  Album[]
+  tracks  Track[]
+  favorites FavoriteArtist[]
+
+  @@map("artists")
+}
