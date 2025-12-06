@@ -133,6 +133,41 @@ Favorites
 + POST /favs/artist/:id - add artist to the favorites
 + DELETE /favs/artist/:id - delete artist from favorites
 
+## Prisma
+
+This project uses Prisma as the ORM for database management.
+
+### Prisma Commands
+
+- `npm run prisma:generate` - Generate Prisma Client
+- `npm run prisma:migrate` - Create and apply a new migration (development)
+- `npm run prisma:migrate:deploy` - Apply pending migrations (production)
+- `npm run prisma:studio` - Open Prisma Studio (database GUI)
+- `npm run prisma:seed` - Seed the database
+
+### Database Setup
+
+1. Create a `.env` file with the following variables:
+   ```
+   PORT=4000
+   DATABASE_NAME=home_library
+   DATABASE_HOST=localhost
+   DATABASE_USER=postgres
+   DATABASE_PASSWORD=postgres
+   DATABASE_PORT=5432
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/home_library?schema=public
+   ```
+
+2. Generate Prisma Client:
+   ```
+   npm run prisma:generate
+   ```
+
+3. Create and apply migrations:
+   ```
+   npm run prisma:migrate
+   ```
+
 ## Docker
 
 To run the app with docker use the following command:
@@ -140,3 +175,13 @@ To run the app with docker use the following command:
 ```
 docker-compose up
 ```
+
+Or for development with watch mode:
+
+```
+npm run start:docker-dev
+```
+
+The Docker setup includes:
+- **main** container - NestJS application
+- **postgres** container - PostgreSQL database
