@@ -65,6 +65,26 @@ npm run lint
 npm run format
 ```
 
+### Vulnerabilities scanning
+
+To scan vulnerabilities
+
+```
+npm run audit
+```
+
+To fix vulnerabilities
+
+```
+npm run audit:fix
+```
+
+To force fix vulnerabilities
+
+```
+npm run audit:force
+```
+
 ## Using
 
 You can make requests with the Postman [https://www.postman.com/](https://www.postman.com/).
