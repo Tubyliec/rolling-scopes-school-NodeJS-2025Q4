@@ -31,7 +31,8 @@
     "prisma:seed": "prisma db seed",
     "audit": "npm audit",
     "audit:fix": "npm audit fix",
-    "audit:force": "npm audit fix --force"
+    "audit:force": "npm audit fix --force",
+    "docker:scout": "echo '=== Scanning nodejs2025q2-service-main ===' && docker scout quickview nodejs2025q2-service-main:latest && echo '\n=== Scanning postgres ===' && docker scout quickview postgres:15-alpine"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

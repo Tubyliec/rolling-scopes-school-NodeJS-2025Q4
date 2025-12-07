@@ -85,6 +85,12 @@ To force fix vulnerabilities
 npm run audit:force
 ```
 
+To scan docker images
+
+```
+npm run docker:scout
+```
+
 ## Using
 
 You can make requests with the Postman [https://www.postman.com/](https://www.postman.com/).
