@@ -3,79 +3,222 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-
-import { AlbumService } from '../album/album.service';
-import { ArtistService } from '../artist/artist.service';
-import { DatabaseService } from '../database/database.service';
-import { TrackService } from '../track/track.service';
-
+import { PrismaService } from '../prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
 import { ResponseFavoriteDto } from './models/dto/response-favorite.dto';
-import { Favorites } from './models/interfaces/favorites.interface';
 import { FavoriteType } from './models/types/favorite-type';
+import { ResponseArtistDto } from '../artist/models/dto/response-artist.dto';
+import { ResponseAlbumDto } from '../album/models/dto/response-album.dto';
+import { ResponseTrackDto } from '../track/models/dto/response-track.dto';
 
 @Injectable()
 export class FavoriteService {
-  constructor(
-    private databaseService: DatabaseService<Favorites>,
-    private trackService: TrackService,
-    private albumService: AlbumService,
-    private artistService: ArtistService,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   public async createFavoriteItem(id: string, type: FavoriteType) {
     try {
+      await this.prismaService.favorite.upsert({
+        where: { id: 1 },
+        update: {},
+        create: { id: 1 },
+      });
+
       switch (type) {
-        case 'artists':
-          await this.artistService.getArtist(id);
+        case 'artists': {
+          const artist = await this.prismaService.artist.findUnique({
+            where: { id },
+          });
+          if (!artist) {
+            throw new UnprocessableEntityException(
+              `Artist with ID ${id} not found`,
+            );
+          }
+          try {
+            await this.prismaService.favoriteArtist.create({
+              data: {
+                favorite: { connect: { id: 1 } },
+                artist: { connect: { id } },
+              },
+            });
+          } catch (error) {
+            if (error.code !== 'P2002') {
+              throw new Error(error);
+            }
+          }
           break;
-        case 'albums':
-          await this.albumService.getAlbum(id);
+        }
+
+        case 'albums': {
+          const album = await this.prismaService.album.findUnique({
+            where: { id },
+          });
+          if (!album) {
+            throw new UnprocessableEntityException(
+              `Album with ID ${id} not found`,
+            );
+          }
+          try {
+            await this.prismaService.favoriteAlbum.create({
+              data: {
+                favorite: { connect: { id: 1 } },
+                album: { connect: { id } },
+              },
+            });
+          } catch (error) {
+            if (error.code !== 'P2002') {
+              throw new Error(error);
+            }
+          }
           break;
-        case 'tracks':
-          await this.trackService.getTrack(id);
+        }
+
+        case 'tracks': {
+          const track = await this.prismaService.track.findUnique({
+            where: { id },
+          });
+          if (!track) {
+            throw new UnprocessableEntityException(
+              `Track with ID ${id} not found`,
+            );
+          }
+          try {
+            await this.prismaService.favoriteTrack.create({
+              data: {
+                favorite: { connect: { id: 1 } },
+                track: { connect: { id } },
+              },
+            });
+          } catch (error) {
+            if (error.code !== 'P2002') {
+              throw new Error(error);
+            }
+          }
           break;
+        }
       }
-      this.databaseService.createFavoriteItem(id, type);
     } catch (error) {
-      if (error.status === 404) {
-        throw new UnprocessableEntityException(
-          `${type.toUpperCase()} with ID ${id} not found`,
-        );
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
       }
+      console.error(`Error in createFavoriteItem:`, error);
       throw error;
     }
   }
 
-  public async findAllFavoriteItems(): Promise<ResponseFavoriteDto> {
-    const [tracks, albums, artists, favoriteItems] = await Promise.all([
-      this.trackService.getAllTracks(),
-      this.albumService.getAllAlbums(),
-      this.artistService.getAllArtists(),
-      this.databaseService.getAllFavoriteItems(),
-    ]);
+  async findAllFavoriteItems(): Promise<ResponseFavoriteDto> {
+    const favorite = await this.prismaService.favorite.findUnique({
+      where: { id: 1 },
+      include: {
+        favoriteArtists: {
+          include: {
+            artist: true,
+          },
+        },
+        favoriteAlbums: {
+          include: {
+            album: true,
+          },
+        },
+        favoriteTracks: {
+          include: {
+            track: true,
+          },
+        },
+      },
+    });
+
+    if (!favorite) {
+      return {
+        artists: [],
+        albums: [],
+        tracks: [],
+      };
+    }
+
+    const artists = favorite.favoriteArtists.map((item) =>
+      plainToInstance(ResponseArtistDto, item.artist),
+    );
+    const albums = favorite.favoriteAlbums.map((item) =>
+      plainToInstance(ResponseAlbumDto, item.album),
+    );
+    const tracks = favorite.favoriteTracks.map((item) =>
+      plainToInstance(ResponseTrackDto, item.track),
+    );
 
     return {
-      artists: artists.filter((artist) =>
-        favoriteItems.artists.some((id) => id === artist.id),
-      ),
-      albums: albums.filter((album) =>
-        favoriteItems.albums.some((id) => id === album.id),
-      ),
-      tracks: tracks.filter((track) =>
-        favoriteItems.tracks.some((id) => id === track.id),
-      ),
+      artists,
+      albums,
+      tracks,
     };
   }
 
   public async removeFavoriteItem(id: string, type: FavoriteType) {
-    const isFavoriteItem = this.databaseService
-      .getAllFavoriteItems()
-      [type].includes(id);
+    try {
+      const favorite = await this.prismaService.favorite.findUnique({
+        where: { id: 1 },
+      });
+      if (!favorite) throw new NotFoundException('Favorites not found');
+      switch (type) {
+        case 'artists':
+          const artist = await this.prismaService.favoriteArtist.findFirst({
+            where: {
+              favoriteId: 1,
+              artistId: id,
+            },
+          });
+          if (artist) {
+            await this.prismaService.favoriteArtist.deleteMany({
+              where: {
+                favoriteId: 1,
+                artistId: id,
+              },
+            });
+          }
+          break;
 
-    if (!isFavoriteItem) {
-      throw new NotFoundException(`Favorite ${type} with ID ${id} not found`);
+        case 'albums':
+          const album = await this.prismaService.favoriteAlbum.findFirst({
+            where: {
+              favoriteId: 1,
+              albumId: id,
+            },
+          });
+          if (album) {
+            await this.prismaService.favoriteAlbum.deleteMany({
+              where: {
+                favoriteId: 1,
+                albumId: id,
+              },
+            });
+          }
+          break;
+
+        case 'tracks':
+          const track = await this.prismaService.favoriteTrack.findFirst({
+            where: {
+              favoriteId: 1,
+              trackId: id,
+            },
+          });
+          if (track) {
+            await this.prismaService.favoriteTrack.deleteMany({
+              where: {
+                favoriteId: 1,
+                trackId: id,
+              },
+            });
+          }
+          break;
+        default:
+          throw new NotFoundException(
+            `Favorite ${type} with ID ${id} not found`,
+          );
+      }
+    } catch (error) {
+      if (error.code === 'P2025' || error.code === 'P2016') {
+        throw new NotFoundException(`Favorite ${type} with ID ${id} not found`);
+      }
+      throw new Error(error);
     }
-
-    this.databaseService.removeFavoriteItem(id, type);
   }
 }

@@ -1,8 +1,9 @@
 model FavoriteTrack {
-  id      String @id @default(uuid())
-  trackId String @unique
-
-  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  trackId    String   @unique
+  favoriteId Int      @default(1)
+  track      Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  favorite   Favorite @relation(fields: [favoriteId], references: [id])
 
   @@map("favorite_tracks")
 }

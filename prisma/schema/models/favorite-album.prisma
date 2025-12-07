@@ -1,8 +1,9 @@
 model FavoriteAlbum {
-  id      String @id @default(uuid())
-  albumId String @unique
-
-  album   Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  albumId    String   @unique
+  favoriteId Int      @default(1)
+  album      Album    @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  favorite   Favorite @relation(fields: [favoriteId], references: [id])
 
   @@map("favorite_albums")
 }

@@ -65,15 +65,9 @@ npm run lint
 npm run format
 ```
 
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
-
 ## Using
 
-You can make requests with the Postman[https://www.postman.com/](https://www.postman.com/).
+You can make requests with the Postman [https://www.postman.com/](https://www.postman.com/).
 
 Use separated routes for all requests:
 
@@ -143,7 +137,6 @@ This project uses Prisma as the ORM for database management.
 - `npm run prisma:migrate` - Create and apply a new migration (development)
 - `npm run prisma:migrate:deploy` - Apply pending migrations (production)
 - `npm run prisma:studio` - Open Prisma Studio (database GUI)
-- `npm run prisma:seed` - Seed the database
 
 ### Database Setup
 

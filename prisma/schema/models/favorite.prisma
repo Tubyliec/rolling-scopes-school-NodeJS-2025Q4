@@ -1,0 +1,11 @@
+model Favorite {
+  id              Int              @id @default(1)
+  artists         String[]
+  albums          String[]
+  tracks          String[]
+  favoriteAlbums  FavoriteAlbum[]
+  favoriteArtists FavoriteArtist[]
+  favoriteTracks  FavoriteTrack[]
+
+  @@map("favorite")
+}
