@@ -4,19 +4,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './models/dto/create-user.dto';
-import { v4 } from 'uuid';
-import { UpdatePasswordDto } from './models/dto/update-password.dto';
-import { ResponseUserDto } from './models/dto/response-user.dto';
 import { plainToInstance } from 'class-transformer';
+import { v4 } from 'uuid';
+
 import { PrismaService } from '../prisma/prisma.service';
+
+import { CreateUserDto } from './models/dto/create-user.dto';
+import { ResponseUserDto } from './models/dto/response-user.dto';
+import { UpdatePasswordDto } from './models/dto/update-password.dto';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prismaService: PrismaService,
-  ) {
-  }
+  constructor(private prismaService: PrismaService) {}
 
   public async getAllUsers(): Promise<ResponseUserDto[]> {
     const users = await this.prismaService.user.findMany();
@@ -24,7 +23,7 @@ export class UserService {
       const userWithTimestamps = {
         ...user,
         createdAt: user.createdAt.getTime(),
-        updatedAt: user.updatedAt.getTime()
+        updatedAt: user.updatedAt.getTime(),
       };
       return plainToInstance(ResponseUserDto, userWithTimestamps);
     });
@@ -42,7 +41,7 @@ export class UserService {
     const userWithTimestamps = {
       ...user,
       createdAt: user.createdAt.getTime(),
-      updatedAt: user.updatedAt.getTime()
+      updatedAt: user.updatedAt.getTime(),
     };
     return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
@@ -76,7 +75,7 @@ export class UserService {
     const userWithTimestamps = {
       ...createdUser,
       createdAt: createdUser.createdAt.getTime(),
-      updatedAt: createdUser.updatedAt.getTime()
+      updatedAt: createdUser.updatedAt.getTime(),
     };
     return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
@@ -113,14 +112,15 @@ export class UserService {
     const userWithTimestamps = {
       ...updatedUserResult,
       createdAt: updatedUserResult.createdAt.getTime(),
-      updatedAt: updatedUserResult.updatedAt.getTime()
+      updatedAt: updatedUserResult.updatedAt.getTime(),
     };
     return plainToInstance(ResponseUserDto, userWithTimestamps);
   }
 
   public async deleteUser(id: string) {
     const user = await this.getUser(id);
-    if (!user) throw new HttpException('User is not found', HttpStatus.NOT_FOUND);
+    if (!user)
+      throw new HttpException('User is not found', HttpStatus.NOT_FOUND);
     return this.prismaService.user.delete({ where: { id } });
   }
 }

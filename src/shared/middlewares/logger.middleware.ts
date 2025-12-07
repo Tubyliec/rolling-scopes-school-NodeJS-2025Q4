@@ -1,6 +1,7 @@
+import * as process from 'node:process';
+
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import * as process from 'node:process';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {

@@ -9,10 +9,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ArtistService } from './artist.service';
+
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
-import { ResponseArtistDto } from './models/dto/response-artist.dto';
+
+import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './models/dto/create-artist.dto';
+import { ResponseArtistDto } from './models/dto/response-artist.dto';
 import { UpdateArtistDto } from './models/dto/update-artist.dto';
 
 @Controller('artist')

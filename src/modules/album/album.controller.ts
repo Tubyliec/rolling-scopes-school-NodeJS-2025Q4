@@ -9,11 +9,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { AlbumService } from './album.service';
-import { Album } from './models/interfaces/album.interface.dto';
+
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
+
+import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './models/dto/create-album.dto';
 import { UpdateAlbumDto } from './models/dto/update-album.dto';
+import { Album } from './models/interfaces/album.interface.dto';
 
 @Controller('album')
 export class AlbumController {

@@ -7,9 +7,11 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
+
+import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
+
 import { FavoriteService } from './favorite.service';
 import { ResponseFavoriteDto } from './models/dto/response-favorite.dto';
-import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
 
 @Controller('favs')
 export class FavoriteController {

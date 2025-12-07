@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
 import { v4 } from 'uuid';
-import { Artist } from './models/interfaces/artist.interface';
+
+import { AlbumService } from '../album/album.service';
+import { DatabaseService } from '../database/database.service';
+import { TrackService } from '../track/track.service';
+
 import { CreateArtistDto } from './models/dto/create-artist.dto';
 import { UpdateArtistDto } from './models/dto/update-artist.dto';
-import { TrackService } from '../track/track.service';
-import { AlbumService } from '../album/album.service';
+import { Artist } from './models/interfaces/artist.interface';
 
 @Injectable()
 export class ArtistService {

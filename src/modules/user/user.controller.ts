@@ -9,11 +9,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateUserDto } from './models/dto/create-user.dto';
-import { UserService } from './user.service';
-import { ResponseUserDto } from './models/dto/response-user.dto';
+
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
+
+import { CreateUserDto } from './models/dto/create-user.dto';
+import { ResponseUserDto } from './models/dto/response-user.dto';
 import { UpdatePasswordDto } from './models/dto/update-password.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {

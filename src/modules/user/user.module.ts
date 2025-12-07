@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
-import { DatabaseModule } from '../database/database.module';
+
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
+import { DatabaseModule } from '../database/database.module';
+
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
 @Module({
   providers: [UserService, UUIDValidationPipe],

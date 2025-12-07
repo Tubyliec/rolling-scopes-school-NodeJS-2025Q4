@@ -9,11 +9,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { TrackService } from './track.service';
+
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
-import { ResponseTrackDto } from './models/dto/response-track.dto';
+
 import { CreateTrackDto } from './models/dto/create-track.dto';
+import { ResponseTrackDto } from './models/dto/response-track.dto';
 import { UpdateTrackDto } from './models/dto/update-track.dto';
+import { TrackService } from './track.service';
 
 @Controller('track')
 export class TrackController {

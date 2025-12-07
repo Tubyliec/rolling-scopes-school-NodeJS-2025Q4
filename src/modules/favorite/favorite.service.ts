@@ -3,13 +3,15 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
-import { Favorites } from './models/interfaces/favorites.interface';
-import { ArtistService } from '../artist/artist.service';
+
 import { AlbumService } from '../album/album.service';
+import { ArtistService } from '../artist/artist.service';
+import { DatabaseService } from '../database/database.service';
 import { TrackService } from '../track/track.service';
-import { FavoriteType } from './models/types/favorite-type';
+
 import { ResponseFavoriteDto } from './models/dto/response-favorite.dto';
+import { Favorites } from './models/interfaces/favorites.interface';
+import { FavoriteType } from './models/types/favorite-type';
 
 @Injectable()
 export class FavoriteService {

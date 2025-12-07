@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { Favorites } from '../favorite/models/interfaces/favorites.interface';
 import { FavoriteType } from '../favorite/models/types/favorite-type';
 

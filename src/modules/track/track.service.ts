@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
 import { v4 } from 'uuid';
-import { Track } from './models/interfaces/track.interface';
+
+import { DatabaseService } from '../database/database.service';
+
 import { CreateTrackDto } from './models/dto/create-track.dto';
 import { UpdateTrackDto } from './models/dto/update-track.dto';
+import { Track } from './models/interfaces/track.interface';
 
 @Injectable()
 export class TrackService {
