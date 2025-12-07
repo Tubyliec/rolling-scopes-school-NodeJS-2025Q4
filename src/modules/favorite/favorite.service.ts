@@ -16,92 +16,84 @@ export class FavoriteService {
   constructor(private prismaService: PrismaService) {}
 
   public async createFavoriteItem(id: string, type: FavoriteType) {
-    try {
-      await this.prismaService.favorite.upsert({
-        where: { id: 1 },
-        update: {},
-        create: { id: 1 },
-      });
+    await this.prismaService.favorite.upsert({
+      where: { id: 1 },
+      update: {},
+      create: { id: 1 },
+    });
 
-      switch (type) {
-        case 'artists': {
-          const artist = await this.prismaService.artist.findUnique({
-            where: { id },
-          });
-          if (!artist) {
-            throw new UnprocessableEntityException(
-              `Artist with ID ${id} not found`,
-            );
-          }
-          try {
-            await this.prismaService.favoriteArtist.create({
-              data: {
-                favorite: { connect: { id: 1 } },
-                artist: { connect: { id } },
-              },
-            });
-          } catch (error) {
-            if (error.code !== 'P2002') {
-              throw new Error(error);
-            }
-          }
-          break;
+    switch (type) {
+      case 'artists': {
+        const artist = await this.prismaService.artist.findUnique({
+          where: { id },
+        });
+        if (!artist) {
+          throw new UnprocessableEntityException(
+            `Artist with ID ${id} not found`,
+          );
         }
-
-        case 'albums': {
-          const album = await this.prismaService.album.findUnique({
-            where: { id },
+        try {
+          await this.prismaService.favoriteArtist.create({
+            data: {
+              favorite: { connect: { id: 1 } },
+              artist: { connect: { id } },
+            },
           });
-          if (!album) {
-            throw new UnprocessableEntityException(
-              `Album with ID ${id} not found`,
-            );
+        } catch (error) {
+          if (error.code !== 'P2002') {
+            throw error;
           }
-          try {
-            await this.prismaService.favoriteAlbum.create({
-              data: {
-                favorite: { connect: { id: 1 } },
-                album: { connect: { id } },
-              },
-            });
-          } catch (error) {
-            if (error.code !== 'P2002') {
-              throw new Error(error);
-            }
-          }
-          break;
         }
-
-        case 'tracks': {
-          const track = await this.prismaService.track.findUnique({
-            where: { id },
-          });
-          if (!track) {
-            throw new UnprocessableEntityException(
-              `Track with ID ${id} not found`,
-            );
-          }
-          try {
-            await this.prismaService.favoriteTrack.create({
-              data: {
-                favorite: { connect: { id: 1 } },
-                track: { connect: { id } },
-              },
-            });
-          } catch (error) {
-            if (error.code !== 'P2002') {
-              throw new Error(error);
-            }
-          }
-          break;
-        }
+        break;
       }
-    } catch (error) {
-      if (error instanceof UnprocessableEntityException) {
-        throw error;
+
+      case 'albums': {
+        const album = await this.prismaService.album.findUnique({
+          where: { id },
+        });
+        if (!album) {
+          throw new UnprocessableEntityException(
+            `Album with ID ${id} not found`,
+          );
+        }
+        try {
+          await this.prismaService.favoriteAlbum.create({
+            data: {
+              favorite: { connect: { id: 1 } },
+              album: { connect: { id } },
+            },
+          });
+        } catch (error) {
+          if (error.code !== 'P2002') {
+            throw error;
+          }
+        }
+        break;
       }
-      console.error(`Error in createFavoriteItem:`, error);
-      throw error;
+
+      case 'tracks': {
+        const track = await this.prismaService.track.findUnique({
+          where: { id },
+        });
+        if (!track) {
+          throw new UnprocessableEntityException(
+            `Track with ID ${id} not found`,
+          );
+        }
+        try {
+          await this.prismaService.favoriteTrack.create({
+            data: {
+              favorite: { connect: { id: 1 } },
+              track: { connect: { id } },
+            },
+          });
+        } catch (error) {
+          if (error.code !== 'P2002') {
+            throw error;
+          }
+        }
+        break;
+      }
     }
   }
 
