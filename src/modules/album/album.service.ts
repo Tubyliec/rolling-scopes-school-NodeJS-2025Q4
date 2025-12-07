@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 } from 'uuid';
 
-import { DatabaseService } from '../database/database.service';
 import { TrackService } from '../track/track.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateAlbumDto } from './models/dto/create-album.dto';
 import { UpdateAlbumDto } from './models/dto/update-album.dto';
@@ -11,59 +11,68 @@ import { Album } from './models/interfaces/album.interface.dto';
 @Injectable()
 export class AlbumService {
   constructor(
-    private databaseService: DatabaseService<Album>,
+    private prismaService: PrismaService,
     private trackService: TrackService,
   ) {}
 
   public async getAllAlbums(): Promise<Album[]> {
-    return this.databaseService.getAllItems();
+    return this.prismaService.album.findMany();
   }
 
   public async getAlbum(id: string): Promise<Album> {
-    const album: Album = this.databaseService.getItem(id);
+    const album = await this.prismaService.album.findUnique({
+      where: { id },
+    });
+
     if (!album) {
       throw new NotFoundException(`Album with ID ${id} not found`);
     }
     return album;
   }
 
-  public async createAlbum(trackRequest: CreateAlbumDto): Promise<Album> {
-    const album = {
-      ...trackRequest,
-      id: v4(),
-    };
-    return this.databaseService.createItem(album);
+  public async createAlbum(albumData: CreateAlbumDto): Promise<Album> {
+    return this.prismaService.album.create({
+      data: {
+        id: v4(),
+        ...albumData,
+      },
+    });
   }
 
   public async updateAlbum(
     id: string,
-    updateRequest: UpdateAlbumDto,
+    updateData: UpdateAlbumDto,
   ): Promise<Album> {
-    const album = this.databaseService.getItem(id);
-    if (!album) {
-      throw new NotFoundException(`Album with ID ${id} not found`);
+    try {
+      return await this.prismaService.album.update({
+        where: { id },
+        data: updateData,
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Album with ID ${id} not found`);
+      }
+      throw error;
     }
-
-    const updatedAlbum = {
-      ...album,
-      name: updateRequest.name,
-      year: updateRequest.year,
-      artistId: updateRequest.artistId,
-    };
-    return this.databaseService.updateItem(id, updatedAlbum);
   }
 
   public async deleteAlbum(id: string): Promise<boolean> {
-    const isAlbumDeleted = this.databaseService.deleteItem(id);
-    if (!isAlbumDeleted) {
-      throw new NotFoundException(`Album with ID ${id} not found`);
-    }
-    const allTracks = await this.trackService.getAllTracks();
-    const tracks = allTracks.filter((track) => track.albumId === id);
+    try {
+      await this.prismaService.track.updateMany({
+        where: { albumId: id },
+        data: { albumId: null },
+      });
 
-    tracks.forEach((track) => {
-      this.trackService.updateTrack(track.id, { ...track, albumId: null });
-    });
-    return isAlbumDeleted;
+      await this.prismaService.album.delete({
+        where: { id },
+      });
+
+      return true;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Album with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 }
