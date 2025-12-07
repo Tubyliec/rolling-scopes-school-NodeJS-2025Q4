@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 } from 'uuid';
 
-import { TrackService } from '../track/track.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 import { CreateAlbumDto } from './models/dto/create-album.dto';
@@ -10,10 +9,7 @@ import { Album } from './models/interfaces/album.interface.dto';
 
 @Injectable()
 export class AlbumService {
-  constructor(
-    private prismaService: PrismaService,
-    private trackService: TrackService,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   public async getAllAlbums(): Promise<Album[]> {
     return this.prismaService.album.findMany();
