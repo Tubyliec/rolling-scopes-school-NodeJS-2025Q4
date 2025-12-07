@@ -31,7 +31,7 @@
     "prisma:seed": "prisma db seed",
     "audit": "npm audit",
     "audit:fix": "npm audit fix",
-    "audit:force": "npm audit fix --force",
+    "audit:force": "npm audit fix --force"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
