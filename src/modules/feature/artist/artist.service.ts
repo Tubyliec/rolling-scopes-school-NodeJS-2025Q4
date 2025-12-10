@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 } from 'uuid';
 
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../core/prisma/prisma.service';
 
 import { CreateArtistDto } from './models/dto/create-artist.dto';
 import { UpdateArtistDto } from './models/dto/update-artist.dto';

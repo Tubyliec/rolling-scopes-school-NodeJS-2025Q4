@@ -7,7 +7,7 @@ import {
 import { plainToInstance } from 'class-transformer';
 import { v4 } from 'uuid';
 
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../core/prisma/prisma.service';
 
 import { CreateUserDto } from './models/dto/create-user.dto';
 import { ResponseUserDto } from './models/dto/response-user.dto';

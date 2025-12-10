@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 } from 'uuid';
 
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../core/prisma/prisma.service';
 
 import { CreateTrackDto } from './models/dto/create-track.dto';
 import { UpdateTrackDto } from './models/dto/update-track.dto';

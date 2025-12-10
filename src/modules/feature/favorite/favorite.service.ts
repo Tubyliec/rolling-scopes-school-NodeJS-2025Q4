@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../core/prisma/prisma.service';
 import { plainToInstance } from 'class-transformer';
 import { ResponseFavoriteDto } from './models/dto/response-favorite.dto';
 import { FavoriteType } from './models/types/favorite-type';
