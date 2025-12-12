@@ -8,6 +8,7 @@ import { PrismaModule } from './modules/core/prisma/prisma.module';
 import { TrackModule } from './modules/feature/track/track.module';
 import { UserModule } from './modules/feature/user/user.module';
 import { LoggerMiddleware } from './modules/shared/middlewares/logger.middleware';
+import { AuthModule } from './modules/core/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { LoggerMiddleware } from './modules/shared/middlewares/logger.middleware
     AlbumModule,
     FavoriteModule,
     PrismaModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -4,7 +4,7 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 
-import { generateSwaggerYaml } from '../tools/generate-swagger-yaml';
+import { generateSwaggerYaml } from '../config/swagger/generate-swagger-yaml';
 
 import { AppModule } from './app.module';
 

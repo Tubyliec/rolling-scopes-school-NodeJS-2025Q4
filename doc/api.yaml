@@ -7,6 +7,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - User
     post:
       operationId: UserController_createUser
       parameters: []
@@ -19,6 +21,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - User
   /user/{id}:
     get:
       operationId: UserController_getUser
@@ -31,6 +35,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - User
     put:
       operationId: UserController_updateUser
       parameters:
@@ -48,6 +54,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - User
     delete:
       operationId: UserController_deleteUser
       parameters:
@@ -59,6 +67,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - User
   /track:
     get:
       operationId: TrackController_getAllTracks
@@ -66,6 +76,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Track
     post:
       operationId: TrackController_createTrack
       parameters: []
@@ -78,6 +90,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Track
   /track/{id}:
     get:
       operationId: TrackController_getTrack
@@ -90,6 +104,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Track
     put:
       operationId: TrackController_updateTrack
       parameters:
@@ -107,6 +123,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Track
     delete:
       operationId: TrackController_deleteTrack
       parameters:
@@ -118,6 +136,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Track
   /artist:
     get:
       operationId: ArtistController_getAllArtists
@@ -125,6 +145,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Artist
     post:
       operationId: ArtistController_createArtist
       parameters: []
@@ -137,6 +159,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Artist
   /artist/{id}:
     get:
       operationId: ArtistController_getArtist
@@ -149,6 +173,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Artist
     put:
       operationId: ArtistController_updateArtist
       parameters:
@@ -166,6 +192,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Artist
     delete:
       operationId: ArtistController_deleteArtist
       parameters:
@@ -177,6 +205,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Artist
   /album:
     get:
       operationId: AlbumController_getAllAlbums
@@ -184,6 +214,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Album
     post:
       operationId: AlbumController_createAlbum
       parameters: []
@@ -196,6 +228,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Album
   /album/{id}:
     get:
       operationId: AlbumController_getAlbum
@@ -208,6 +242,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Album
     put:
       operationId: AlbumController_updateAlbum
       parameters:
@@ -225,6 +261,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Album
     delete:
       operationId: AlbumController_deleteAlbum
       parameters:
@@ -236,6 +274,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Album
   /favs:
     get:
       operationId: FavoriteController_findAll
@@ -243,6 +283,8 @@ paths:
       responses:
         '200':
           description: ''
+      tags:
+        - Favorite
   /favs/track/{id}:
     post:
       operationId: FavoriteController_createTrack
@@ -255,6 +297,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Favorite
     delete:
       operationId: FavoriteController_removeTrack
       parameters:
@@ -266,6 +310,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Favorite
   /favs/album/{id}:
     post:
       operationId: FavoriteController_createAlbum
@@ -278,6 +324,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Favorite
     delete:
       operationId: FavoriteController_removeAlbum
       parameters:
@@ -289,6 +337,8 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Favorite
   /favs/artist/{id}:
     post:
       operationId: FavoriteController_createArtist
@@ -301,6 +351,8 @@ paths:
       responses:
         '201':
           description: ''
+      tags:
+        - Favorite
     delete:
       operationId: FavoriteController_removeArtist
       parameters:
@@ -312,6 +364,23 @@ paths:
       responses:
         '204':
           description: ''
+      tags:
+        - Favorite
+  /auth/sign-up:
+    post:
+      operationId: AuthController_signUp
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - Auth
 info:
   title: Home Library Service
   description: The Home Library Service API description
