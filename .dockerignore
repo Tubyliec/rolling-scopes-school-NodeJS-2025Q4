@@ -1,4 +1,4 @@
-Dockerfile
+config/docker/Dockerfile-main
 .dockerignore
 node_modules
 dist

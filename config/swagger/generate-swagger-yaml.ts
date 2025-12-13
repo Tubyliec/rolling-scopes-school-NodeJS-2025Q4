@@ -8,6 +8,7 @@ export async function generateSwaggerYaml(app: any): Promise<void> {
     .setTitle('Home Library Service')
     .setDescription('The Home Library Service API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

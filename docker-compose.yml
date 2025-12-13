@@ -3,7 +3,7 @@ services:
     container_name: main
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: config/docker/Dockerfile-main
     image: tubyliec/home-library-main
     restart: on-failure
     env_file:
@@ -26,19 +26,19 @@ services:
     develop:
       watch:
         - action: sync+restart
-          path: .
+          path: ../..
           target: /app
           ignore:
             - node_modules/
             - dist/
         - action: rebuild
-          path: package.json
+          path: ../../package.json
 
   postgres:
     container_name: postgres
     build:
       context: .
-      dockerfile: Dockerfile-postgres
+      dockerfile: config/docker/Dockerfile-postgres
     image: tubyliec/home-library-db
     env_file:
       - .env
