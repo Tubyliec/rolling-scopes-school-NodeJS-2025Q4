@@ -7,7 +7,6 @@ import { FavoriteModule } from './modules/feature/favorite/favorite.module';
 import { PrismaModule } from './modules/core/prisma/prisma.module';
 import { TrackModule } from './modules/feature/track/track.module';
 import { UserModule } from './modules/feature/user/user.module';
-import { LoggerMiddleware } from './modules/shared/middlewares/logger.middleware';
 import { AuthModule } from './modules/core/auth/auth.module';
 
 @Module({
@@ -24,8 +23,4 @@ import { AuthModule } from './modules/core/auth/auth.module';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
