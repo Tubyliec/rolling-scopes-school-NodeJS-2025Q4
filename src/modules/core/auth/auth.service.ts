@@ -2,8 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import {
   InvalidCredentialsException,
   UserAlreadyExistsException,
-  InvalidTokenException,
-  InvalidRefreshTokenException,
 } from '../../shared/exceptions/auth.exception';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';

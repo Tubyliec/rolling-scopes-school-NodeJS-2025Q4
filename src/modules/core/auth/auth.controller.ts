@@ -10,7 +10,6 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './models/dto/login.dto';
 import { AuthResponseDto } from './models/dto/auth-response.dto';
-import { RefreshTokenDto } from './models/dto/refresh-token.dto';
 import { Public } from '../../shared/decorators/is-public.decorator';
 import { JwtRefreshGuard } from '../../shared/guards/jwt-refresh.guard';
 
