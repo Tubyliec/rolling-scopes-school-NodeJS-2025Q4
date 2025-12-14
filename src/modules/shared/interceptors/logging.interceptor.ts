@@ -39,14 +39,6 @@ export class LoggingInterceptor implements NestInterceptor {
           timestamp: new Date().toISOString(),
         });
       }),
-      catchError((error) => {
-        this.loggingService.error('Request failed', {
-          error: error.message,
-          stack: error.stack,
-          timestamp: new Date().toISOString(),
-        });
-        return throwError(() => error);
-      }),
     );
   }
 }
