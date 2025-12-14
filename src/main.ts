@@ -9,12 +9,21 @@ import { JwtAuthGuard } from './modules/shared/guards/jwt-auth.guard';
 import { generateSwaggerYaml } from '../config/swagger/generate-swagger-yaml';
 
 import { AppModule } from './app.module';
+import { LoggingService } from './modules/core/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port: string = configService.get('PORT');
+  const loggingService = app.get(LoggingService);
 
+  process.on('uncaughtException', (error) => {
+    loggingService.error('uncaughtException', error);
+  });
+
+  process.on('unhandledRejection', (reason) => {
+    loggingService.error('unhandledRejection', reason);
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -28,7 +37,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(loggingService));
 
   await generateSwaggerYaml(app);
 
