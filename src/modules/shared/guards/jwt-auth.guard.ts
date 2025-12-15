@@ -40,7 +40,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
       request['user'] = payload;
       return true;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Invalid access token');
     }
   }

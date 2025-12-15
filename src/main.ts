@@ -1,10 +1,8 @@
 import * as process from 'node:process';
 
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './modules/shared/filters/http-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
-import { JwtAuthGuard } from './modules/shared/guards/jwt-auth.guard';
+import { NestFactory } from '@nestjs/core';
 
 import { generateSwaggerYaml } from '../config/swagger/generate-swagger-yaml';
 
