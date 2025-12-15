@@ -12,7 +12,9 @@ import { LoginDto } from './models/dto/login.dto';
 import { AuthResponseDto } from './models/dto/auth-response.dto';
 import { Public } from '../../shared/decorators/is-public.decorator';
 import { JwtRefreshGuard } from '../../shared/guards/jwt-refresh.guard';
+import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -28,7 +30,7 @@ export class AuthController {
       }),
     )
     signUpRequest: LoginDto,
-  ): Promise<AuthResponseDto> {
+  ) {
     return this.authService.signUp(signUpRequest);
   }
 

@@ -49,7 +49,13 @@ export class AuthService {
         password: hashedPassword,
       },
     });
-    return this.generateTokens(newUser.id);
+    return {
+      id: newUser.id,
+      login: newUser.login,
+      version: newUser.version,
+      createdAt: Number(newUser.createdAt),
+      updatedAt: Number(newUser.updatedAt),
+    };
   }
 
   public async login(loginRequest: CreateUserDto) {

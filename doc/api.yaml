@@ -366,7 +366,7 @@ paths:
           description: ''
       tags:
         - Favorite
-  /auth/sign-up:
+  /auth/signup:
     post:
       operationId: AuthController_signUp
       parameters: []
@@ -375,9 +375,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserDto'
+              $ref: '#/components/schemas/LoginDto'
       responses:
         '201':
+          description: ''
+      tags:
+        - Auth
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Auth
+  /auth/refresh:
+    post:
+      operationId: AuthController_refresh
+      parameters: []
+      responses:
+        '200':
           description: ''
       tags:
         - Auth
@@ -389,6 +413,11 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     CreateUserDto:
       type: object
@@ -482,3 +511,6 @@ components:
       required:
         - name
         - year
+    LoginDto:
+      type: object
+      properties: {}

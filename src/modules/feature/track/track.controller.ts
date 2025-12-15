@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 
 import { UUIDValidationPipe } from '../../shared/validators/uuid-validation.pipe';
@@ -17,10 +16,8 @@ import { CreateTrackDto } from './models/dto/create-track.dto';
 import { ResponseTrackDto } from './models/dto/response-track.dto';
 import { UpdateTrackDto } from './models/dto/update-track.dto';
 import { TrackService } from './track.service';
-import { JwtAuthGuard } from '../../shared/guards/jwt-auth.guard';
 
 @Controller('track')
-@UseGuards(JwtAuthGuard)
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
