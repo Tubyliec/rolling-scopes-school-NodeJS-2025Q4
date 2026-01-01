@@ -6,5 +6,9 @@ export const changeDir = async (input) => {
     errorMessage();
   }
   const targetPath = path.resolve(input);
-  process.chdir(targetPath);
+  try {
+    process.chdir(targetPath);
+  } catch {
+    errorMessage();
+  }
 };
