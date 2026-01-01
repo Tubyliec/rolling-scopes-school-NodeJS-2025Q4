@@ -1,3 +1,1 @@
-# Node.js basics
-
-## !!! Please don't submit Pull Requests to this repository !!!
+Rolling Scopes School NodeJS 2025Q4 tasks
